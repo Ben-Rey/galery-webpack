@@ -1,0 +1,65 @@
+body {
+  margin: 0;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  font-family: "Open Sans", sans-serif;
+  min-height: 10vh;
+  width: 100%;
+  background-color: rgb(121, 216, 184);
+  color: rgb(58, 58, 58);
+  font-size: 24pt;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#main-container {
+  display: grid;
+  align-items: center;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-gap: 1em 1em;
+  margin-top: 10vh;
+}
+
+.fit-picture {
+  width: 98%;
+  margin: 1%;
+  min-width: 150px;
+  align-self: stretch;
+}
+
+#my_camera {
+  width: 100vw;
+}
+
+.add-picture {
+  display: inline-block;
+  padding: 0.35em 1.2em;
+  border: 0.1em solid #ffffff;
+  background-color: #ca8181;
+  margin: 0 0.3em 0.3em 0;
+  border-radius: 0.12em;
+  box-sizing: border-box;
+  text-decoration: none;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  color: #ffffff;
+  text-align: center;
+  transition: all 0.2s;
+}
+.add-picture:hover {
+  color: #000000;
+  background-color: #ffffff;
+}
+#install-app {
+  background-color: #9cd6ff;
+}
+
+@media only screen and (max-width: 600px) {
+  header {
+    flex-direction: column;
+  }
+}

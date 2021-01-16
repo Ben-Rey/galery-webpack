@@ -10,7 +10,7 @@ window.addEventListener("beforeinstallprompt", (e) => {
   deferredPrompt = e;
 });
 
-serviceWorker();
+// serviceWorker();
 
 let mainPicturesContainer;
 let deferredPrompt;
@@ -28,16 +28,16 @@ function start() {
 
   buttonInstall.addEventListener("click", (e) => {
     // Show the install prompt
-    console.log("Test Install")
-    // deferredPrompt.prompt();
-    // // Wait for the user to respond to the prompt
-    // deferredPrompt.userChoice.then((choiceResult) => {
-    //   if (choiceResult.outcome === "accepted") {
-    //     console.log("User accepted the install prompt");
-    //   } else {
-    //     console.log("User dismissed the install prompt");
-    //   }
-    // });
+
+    deferredPrompt.prompt();
+    // Wait for the user to respond to the prompt
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === "accepted") {
+        console.log("User accepted the install prompt");
+      } else {
+        console.log("User dismissed the install prompt");
+      }
+    });
   });
 
   // loadWebcam();
@@ -60,33 +60,21 @@ function addRandomPicture() {
   }
 }
 
-function serviceWorker() {
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", function () {
-      navigator.serviceWorker.register('/sw.js').then(
-        function (registration) {
-          console.log(
-            "ServiceWorker registration successful with scope: ",
-            registration.scope
-          );
-        },
-        function (err) {
-          console.log("ServiceWorker registration failed: ", err);
-        }
-      );
-    });
-  }
-}
-
-
-// function loadWebcam() {
-//   setTimeout(() => {
-//     Webcam.set({
-//       width: 1000,
-//       height: 240,
-//       image_format: "jpeg",
-//       jpeg_quality: 90,
+// function serviceWorker() {
+//   if ("serviceWorker" in navigator) {
+//     window.addEventListener("load", function () {
+//       navigator.serviceWorker.register('/sw.js').then(
+//         function (registration) {
+//           console.log(
+//             "ServiceWorker registration successful with scope: ",
+//             registration.scope
+//           );
+//         },
+//         function (err) {
+//           console.log("ServiceWorker registration failed: ", err);
+//         }
+//       );
 //     });
-//     Webcam.attach("#my_camera");
-//   }, 2000);
+//   }
 // }
+

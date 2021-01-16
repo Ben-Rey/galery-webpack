@@ -3,6 +3,18 @@ precacheAndRoute(self.__WB_MANIFEST || [])
 
 const cacheName = "Gallery-app";
 
+self.addEventListener('install', function(event) {
+  event.waitUntil(
+    caches.open(cacheName).then(function(cache) {
+      return cache.addAll(
+        [
+          '/style.css',
+        ]
+      );
+    })
+  );
+});
+
 self.addEventListener('activate', function (e) {
   e.waitUntil(
     caches.keys().then(function (keyList) {

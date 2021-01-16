@@ -3,7 +3,7 @@ const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 
 
 module.exports = {
-    mode: 'production',
+    mode: 'development',
     entry: './src/index.js',
     output: {
         filename: 'bundle.js',
@@ -31,8 +31,5 @@ module.exports = {
             swSrc: './src/sw.js',
             swDest: 'sw.js'
         })
-        // new ServiceWorkerWebpackPlugin({
-        //     entry: path.join(__dirname, 'src/sw.js'),
-        //   }),
     ]
 };

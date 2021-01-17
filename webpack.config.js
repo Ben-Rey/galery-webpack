@@ -2,7 +2,7 @@ const path = require('path');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 
 module.exports = {
-    mode: 'development',
+    mode: 'production',
     entry:['./src/index.js'],
     output: {
         filename: 'bundle.js',

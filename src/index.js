@@ -1,6 +1,6 @@
-window.onload = function() {
-  init();
-};
+import './style.css';
+import './sw'
+import { addPictureFromDb, addRandomPicture } from './js/domInteraction'
 
 window.addEventListener("beforeinstallprompt", (e) => {
   // Prevent the mini-infobar from appearing on mobile
@@ -9,32 +9,24 @@ window.addEventListener("beforeinstallprompt", (e) => {
   deferredPrompt = e;
 });
 
-import './style.css';
-import './sw'
-import { addPictureFromDb, addRandomPicture } from './js/domInteraction'
-
-
 let deferredPrompt;
+let buttonAddPicture = document.getElementById("add-picture");
+let buttonInstall = document.getElementById("install-app");
 
-function init(){
-console.log('init');
-  let buttonAddPicture = document.getElementById("add-picture");
-  let buttonInstall = document.getElementById("install-app");
-  buttonAddPicture.addEventListener("click", addRandomPicture);
-  
-  buttonInstall.addEventListener("click", (e) => {
-    console.log(deferredPrompt);
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === "accepted") {
-          console.log("User accepted the install prompt");
-        } else {
-          console.log("User dismissed the install prompt");
-        }
-      });
-    }
-  });
-  addPictureFromDb()
-  
-}
+buttonAddPicture.addEventListener("click", addRandomPicture);
+
+buttonInstall.addEventListener("click", (e) => {
+  console.log(deferredPrompt);
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === "accepted") {
+        console.log("User accepted the install prompt");
+      } else {
+        console.log("User dismissed the install prompt");
+      }
+    });
+  }
+});
+addPictureFromDb()
+

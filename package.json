@@ -22,8 +22,9 @@
     "workbox-webpack-plugin": "^6.0.2"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.2",
     "fs": "0.0.1-security",
-    "lodash": "^4.17.20",
+    "idb": "^6.0.0",
     "serviceworker-webpack-plugin": "^1.0.1",
     "workbox-precaching": "^6.0.2"
   }

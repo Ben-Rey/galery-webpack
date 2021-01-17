@@ -6,8 +6,7 @@
  * or disable the default devtool with "devtool: false".
  * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
  */
-/******/ (() => { // webpackBootstrap
-/******/ 	var __webpack_modules__ = ({
+/******/ var __webpack_modules__ = ({
 
 /***/ "./node_modules/workbox-core/_private/Deferred.js":
 /*!********************************************************!*\
@@ -576,7 +575,7 @@ eval("\n// @ts-ignore\ntry {\n    self['workbox:strategies:6.0.2'] && _();\n}\nc
   \****************************************/
 /***/ (() => {
 
-eval("const cacheName = \"galerie-v1\";\r\n\r\n// self.addEventListener(\"activate\", e => {\r\n//   e.waitUntil(\r\n//     caches.keys().then(function(keyList) {\r\n//       return Promise.all(\r\n//         keyList.map(function(key) {\r\n//           if (key !== cacheName) {\r\n//             return caches.delete(key);\r\n//           }\r\n//         })\r\n//       );\r\n//     })\r\n//   );\r\n// });\r\n\r\nself.addEventListener('activate', function (e) {\r\n  e.waitUntil(\r\n    caches.keys().then(function (keyList) {\r\n      return Promise.all(keyList.map(function (key) {\r\n        if (key !== cacheName) {\r\n          return caches.delete(key);\r\n        }\r\n      }));\r\n    })\r\n  );\r\n});\n\n//# sourceURL=webpack://pwa-gallery/./src/service_worker/activate.js?");
+eval("const cacheName = \"galerie-v1\";\r\n\r\nself.addEventListener('activate', function (e) {\r\n  e.waitUntil(\r\n    caches.keys().then(function (keyList) {\r\n      return Promise.all(keyList.map(function (key) {\r\n        if (key !== cacheName) {\r\n          return caches.delete(key);\r\n        }\r\n      }));\r\n    })\r\n  );\r\n});\n\n//# sourceURL=webpack://pwa-gallery/./src/service_worker/activate.js?");
 
 /***/ }),
 
@@ -586,7 +585,7 @@ eval("const cacheName = \"galerie-v1\";\r\n\r\n// self.addEventListener(\"activa
   \*************************************/
 /***/ (() => {
 
-eval("const cacheName = \"galerie-v1\";\r\n\r\n// self.addEventListener(\"fetch\", event => {\r\n// \tconsole.log(event.request.url);\r\n// });\r\n\r\n// self.addEventListener(\"fetch\", (event) => {\r\n//   const url = event.request.url;\r\n\r\n//   if (url.indexOf(\"https://nostalgic-lamarr-5a666c.netlify.app/images.json\") === 0) {\r\n//     event.respondWith(\r\n//       fetch(event.request).then((response) => {\r\n//         if(response.status !== 200) {\r\n//           console.error(\r\n//             \"Service Worker\",\r\n//             \"Error when fetching\",\r\n//             event.request.url\r\n//           );\r\n\t\t  \r\n//           return response;\r\n//         }\r\n//         console.info(\"Formatting data\");\r\n\r\n//         return response.json().then((json) => {\r\n// \t\t\tconst formattedResponse = json.map((j) => ({\r\n// \t\t\t\tname: j.name,\r\n// \t\t\t\tdescription: j.description || \"\",\r\n// \t\t\t\tupdated_at: j.updated_at,\r\n// \t\t\t\turl: j.url\r\n// \t\t\t}));\r\n\r\n// \t\t\t//return new Response(JSON.stringify(formattedResponse));\r\n// \t\t\tconst finalResponse = new Response(JSON.stringify(formattedResponse));\r\n// \t\t\tlet savedResponse = finalResponse.clone();\r\n\r\n// \t\t\tcaches.open(cacheName).then(cache => {\r\n// \t\t\tcache.put(event.request,savedResponse);\r\n// \t\t\t});\r\n\r\n// \t\t\treturn finalResponse;\r\n//         });\r\n//       })\r\n//     );\r\n//   }\r\n//   else {\r\n//     event.respondWith(\r\n//       caches\r\n//         .open(cacheName)\r\n//         .then(cache => cache.match(event.request))\r\n//         .then(response => response || fetch(event.request))\r\n//     );\r\n//   }\r\n// });\r\n\r\n\r\nself.addEventListener('fetch', function (event) {\r\n  if (event.request.url.includes(\"picsum\")){\r\n    event.respondWith(\r\n      caches.open(cacheName)\r\n        .then((cache) => {\r\n          return cache.match(event.request)\r\n            .then(response => {\r\n              const fetchPromise =\r\n                fetch(event.request)\r\n                  .then(networkResponse => {\r\n                    cache.put('photo',\r\n                      networkResponse.clone());\r\n                    return networkResponse;\r\n                  })\r\n              console.log(response);\r\n              return response || fetchPromise;\r\n            })\r\n        })\r\n    )\r\n  }\r\n\r\n})\r\n\n\n//# sourceURL=webpack://pwa-gallery/./src/service_worker/fetch.js?");
+eval("const cacheName = \"galerie-v1\";\r\n\r\nself.addEventListener('fetch', function (event) {\r\n  event.respondWith(\r\n    caches.open(cacheName)\r\n      .then((cache) => {\r\n        return cache.match(event.request)\r\n          .then(response => {\r\n            const fetchPromise =\r\n              fetch(event.request)\r\n                .then(networkResponse => {\r\n                  // if (event.request.url.includes(\"picsum\")) {\r\n                  //   cache.put('photo',\r\n                  //     networkResponse.clone());\r\n                  // }\r\n                  return networkResponse;\r\n                })\r\n            return response || fetchPromise;\r\n          })\r\n      })\r\n  )\r\n\r\n})\r\n\n\n//# sourceURL=webpack://pwa-gallery/./src/service_worker/fetch.js?");
 
 /***/ }),
 
@@ -596,7 +595,7 @@ eval("const cacheName = \"galerie-v1\";\r\n\r\n// self.addEventListener(\"fetch\
   \***************************************/
 /***/ (() => {
 
-eval("const cacheName = \"galerie-v1\";\r\nconst files = [\r\n  \"/\",\r\n  \"/bundle.js\",\r\n  \"/manifest.json\",\r\n  \"/image.json\"\r\n];\r\n\r\n\r\nself.addEventListener(\"install\", e => {\r\n  caches.open(cacheName).then(cache => {\r\n    cache.addAll(files);\r\n  });\r\n});\n\n//# sourceURL=webpack://pwa-gallery/./src/service_worker/install.js?");
+eval("const cacheName = \"galerie-v1\";\r\nconst files = [\r\n  \"/\",\r\n  \"/bundle.js\",\r\n  \"/manifest.webmanifest\",\r\n  \"/image.json\",\r\n];\r\n\r\nself.addEventListener(\"install\", e => {\r\n  caches.open(cacheName).then(cache => {\r\n    cache.addAll(files);\r\n  });\r\n});\n\n//# sourceURL=webpack://pwa-gallery/./src/service_worker/install.js?");
 
 /***/ }),
 
@@ -607,80 +606,78 @@ eval("const cacheName = \"galerie-v1\";\r\nconst files = [\r\n  \"/\",\r\n  \"/b
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _service_worker_install_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./service_worker/install.js */ \"./src/service_worker/install.js\");\n/* harmony import */ var _service_worker_install_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_service_worker_install_js__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _service_worker_activate_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./service_worker/activate.js */ \"./src/service_worker/activate.js\");\n/* harmony import */ var _service_worker_activate_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_service_worker_activate_js__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _service_worker_fetch_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./service_worker/fetch.js */ \"./src/service_worker/fetch.js\");\n/* harmony import */ var _service_worker_fetch_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_service_worker_fetch_js__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var workbox_precaching__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! workbox-precaching */ \"./node_modules/workbox-precaching/index.mjs\");\n\n\n\n\nconst cacheName = \"galerie-v1\";\n\n\n(0,workbox_precaching__WEBPACK_IMPORTED_MODULE_3__.precacheAndRoute)([{'revision':'d72d2f41a6515f924527bfd1341c96fb','url':'bundle.js'}] || []);\n\n\n\n\n//# sourceURL=webpack://pwa-gallery/./src/sw.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _service_worker_install_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./service_worker/install.js */ \"./src/service_worker/install.js\");\n/* harmony import */ var _service_worker_install_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_service_worker_install_js__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _service_worker_activate_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./service_worker/activate.js */ \"./src/service_worker/activate.js\");\n/* harmony import */ var _service_worker_activate_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_service_worker_activate_js__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _service_worker_fetch_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./service_worker/fetch.js */ \"./src/service_worker/fetch.js\");\n/* harmony import */ var _service_worker_fetch_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_service_worker_fetch_js__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var workbox_precaching__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! workbox-precaching */ \"./node_modules/workbox-precaching/index.mjs\");\n\n\n\n\n\n(0,workbox_precaching__WEBPACK_IMPORTED_MODULE_3__.precacheAndRoute)([{'revision':'00c562a374004b57b798e26d085cffdd','url':'bundle.js'}] || []);\n\n\n\n//# sourceURL=webpack://pwa-gallery/./src/sw.js?");
 
 /***/ })
 
-/******/ 	});
+/******/ });
 /************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		if(__webpack_module_cache__[moduleId]) {
-/******/ 			return __webpack_module_cache__[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
+/******/ // The module cache
+/******/ var __webpack_module_cache__ = {};
+/******/ 
+/******/ // The require function
+/******/ function __webpack_require__(moduleId) {
+/******/ 	// Check if module is in cache
+/******/ 	if(__webpack_module_cache__[moduleId]) {
+/******/ 		return __webpack_module_cache__[moduleId].exports;
 /******/ 	}
-/******/ 	
+/******/ 	// Create a new module (and put it into the cache)
+/******/ 	var module = __webpack_module_cache__[moduleId] = {
+/******/ 		// no module.id needed
+/******/ 		// no module.loaded needed
+/******/ 		exports: {}
+/******/ 	};
+/******/ 
+/******/ 	// Execute the module function
+/******/ 	__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 
+/******/ 	// Return the exports of the module
+/******/ 	return module.exports;
+/******/ }
+/******/ 
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => module['default'] :
-/******/ 				() => module;
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
+/******/ /* webpack/runtime/compat get default export */
+/******/ (() => {
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = (module) => {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			() => module['default'] :
+/******/ 			() => module;
+/******/ 		__webpack_require__.d(getter, { a: getter });
+/******/ 		return getter;
+/******/ 	};
+/******/ })();
+/******/ 
+/******/ /* webpack/runtime/define property getters */
+/******/ (() => {
+/******/ 	// define getter functions for harmony exports
+/******/ 	__webpack_require__.d = (exports, definition) => {
+/******/ 		for(var key in definition) {
+/******/ 			if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 				Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop)
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
+/******/ 		}
+/******/ 	};
+/******/ })();
+/******/ 
+/******/ /* webpack/runtime/hasOwnProperty shorthand */
+/******/ (() => {
+/******/ 	__webpack_require__.o = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop)
+/******/ })();
+/******/ 
+/******/ /* webpack/runtime/make namespace object */
+/******/ (() => {
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = (exports) => {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/ })();
+/******/ 
 /************************************************************************/
-/******/ 	// startup
-/******/ 	// Load entry module
-/******/ 	__webpack_require__("./src/sw.js");
-/******/ 	// This entry module used 'exports' so it can't be inlined
-/******/ })()
-;
+/******/ // startup
+/******/ // Load entry module
+/******/ __webpack_require__("./src/sw.js");
+/******/ // This entry module used 'exports' so it can't be inlined

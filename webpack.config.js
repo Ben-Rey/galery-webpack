@@ -1,13 +1,18 @@
 const path = require('path');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 
-
 module.exports = {
     mode: 'development',
-    entry: './src/index.js',
+    entry:['./src/index.js'],
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist'),
+    },
+    experiments: {
+        outputModule: true,
+        syncWebAssembly: true,
+        topLevelAwait: true,
+        asyncWebAssembly: true,
     },
     devServer: {
         contentBase: path.join(__dirname, 'dist'),

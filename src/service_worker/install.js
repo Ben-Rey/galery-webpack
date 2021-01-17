@@ -2,11 +2,9 @@ const cacheName = "galerie-v1";
 const files = [
   "/",
   "/bundle.js",
-  "/manifest.json",
+  "/manifest.webmanifest",
   "/image.json",
-  "images"
 ];
-
 
 self.addEventListener("install", e => {
   caches.open(cacheName).then(cache => {

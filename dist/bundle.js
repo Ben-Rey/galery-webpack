@@ -6,8 +6,7 @@
  * or disable the default devtool with "devtool: false".
  * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
  */
-/******/ (() => { // webpackBootstrap
-/******/ 	var __webpack_modules__ = ({
+/******/ var __webpack_modules__ = ({
 
 /***/ "./node_modules/css-loader/dist/cjs.js!./src/style.css":
 /*!*************************************************************!*\
@@ -28,6 +27,28 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 "use strict";
 eval("\n\n/*\n  MIT License http://www.opensource.org/licenses/mit-license.php\n  Author Tobias Koppers @sokra\n*/\n// css base code, injected by the css-loader\n// eslint-disable-next-line func-names\nmodule.exports = function (cssWithMappingToString) {\n  var list = []; // return the list of modules as css string\n\n  list.toString = function toString() {\n    return this.map(function (item) {\n      var content = cssWithMappingToString(item);\n\n      if (item[2]) {\n        return \"@media \".concat(item[2], \" {\").concat(content, \"}\");\n      }\n\n      return content;\n    }).join('');\n  }; // import a list of modules into the list\n  // eslint-disable-next-line func-names\n\n\n  list.i = function (modules, mediaQuery, dedupe) {\n    if (typeof modules === 'string') {\n      // eslint-disable-next-line no-param-reassign\n      modules = [[null, modules, '']];\n    }\n\n    var alreadyImportedModules = {};\n\n    if (dedupe) {\n      for (var i = 0; i < this.length; i++) {\n        // eslint-disable-next-line prefer-destructuring\n        var id = this[i][0];\n\n        if (id != null) {\n          alreadyImportedModules[id] = true;\n        }\n      }\n    }\n\n    for (var _i = 0; _i < modules.length; _i++) {\n      var item = [].concat(modules[_i]);\n\n      if (dedupe && alreadyImportedModules[item[0]]) {\n        // eslint-disable-next-line no-continue\n        continue;\n      }\n\n      if (mediaQuery) {\n        if (!item[2]) {\n          item[2] = mediaQuery;\n        } else {\n          item[2] = \"\".concat(mediaQuery, \" and \").concat(item[2]);\n        }\n      }\n\n      list.push(item);\n    }\n  };\n\n  return list;\n};\n\n//# sourceURL=webpack://pwa-gallery/./node_modules/css-loader/dist/runtime/api.js?");
+
+/***/ }),
+
+/***/ "./node_modules/idb/build/esm/index.js":
+/*!*********************************************!*\
+  !*** ./node_modules/idb/build/esm/index.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"unwrap\": () => /* reexport safe */ _wrap_idb_value_js__WEBPACK_IMPORTED_MODULE_0__.u,\n/* harmony export */   \"wrap\": () => /* reexport safe */ _wrap_idb_value_js__WEBPACK_IMPORTED_MODULE_0__.w,\n/* harmony export */   \"deleteDB\": () => /* binding */ deleteDB,\n/* harmony export */   \"openDB\": () => /* binding */ openDB\n/* harmony export */ });\n/* harmony import */ var _wrap_idb_value_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./wrap-idb-value.js */ \"./node_modules/idb/build/esm/wrap-idb-value.js\");\n\n\n\n/**\n * Open a database.\n *\n * @param name Name of the database.\n * @param version Schema version.\n * @param callbacks Additional callbacks.\n */\nfunction openDB(name, version, { blocked, upgrade, blocking, terminated } = {}) {\n    const request = indexedDB.open(name, version);\n    const openPromise = (0,_wrap_idb_value_js__WEBPACK_IMPORTED_MODULE_0__.w)(request);\n    if (upgrade) {\n        request.addEventListener('upgradeneeded', (event) => {\n            upgrade((0,_wrap_idb_value_js__WEBPACK_IMPORTED_MODULE_0__.w)(request.result), event.oldVersion, event.newVersion, (0,_wrap_idb_value_js__WEBPACK_IMPORTED_MODULE_0__.w)(request.transaction));\n        });\n    }\n    if (blocked)\n        request.addEventListener('blocked', () => blocked());\n    openPromise\n        .then((db) => {\n        if (terminated)\n            db.addEventListener('close', () => terminated());\n        if (blocking)\n            db.addEventListener('versionchange', () => blocking());\n    })\n        .catch(() => { });\n    return openPromise;\n}\n/**\n * Delete a database.\n *\n * @param name Name of the database.\n */\nfunction deleteDB(name, { blocked } = {}) {\n    const request = indexedDB.deleteDatabase(name);\n    if (blocked)\n        request.addEventListener('blocked', () => blocked());\n    return (0,_wrap_idb_value_js__WEBPACK_IMPORTED_MODULE_0__.w)(request).then(() => undefined);\n}\n\nconst readMethods = ['get', 'getKey', 'getAll', 'getAllKeys', 'count'];\nconst writeMethods = ['put', 'add', 'delete', 'clear'];\nconst cachedMethods = new Map();\nfunction getMethod(target, prop) {\n    if (!(target instanceof IDBDatabase &&\n        !(prop in target) &&\n        typeof prop === 'string')) {\n        return;\n    }\n    if (cachedMethods.get(prop))\n        return cachedMethods.get(prop);\n    const targetFuncName = prop.replace(/FromIndex$/, '');\n    const useIndex = prop !== targetFuncName;\n    const isWrite = writeMethods.includes(targetFuncName);\n    if (\n    // Bail if the target doesn't exist on the target. Eg, getAll isn't in Edge.\n    !(targetFuncName in (useIndex ? IDBIndex : IDBObjectStore).prototype) ||\n        !(isWrite || readMethods.includes(targetFuncName))) {\n        return;\n    }\n    const method = async function (storeName, ...args) {\n        // isWrite ? 'readwrite' : undefined gzipps better, but fails in Edge :(\n        const tx = this.transaction(storeName, isWrite ? 'readwrite' : 'readonly');\n        let target = tx.store;\n        if (useIndex)\n            target = target.index(args.shift());\n        // Must reject if op rejects.\n        // If it's a write operation, must reject if tx.done rejects.\n        // Must reject with op rejection first.\n        // Must resolve with op value.\n        // Must handle both promises (no unhandled rejections)\n        return (await Promise.all([\n            target[targetFuncName](...args),\n            isWrite && tx.done,\n        ]))[0];\n    };\n    cachedMethods.set(prop, method);\n    return method;\n}\n(0,_wrap_idb_value_js__WEBPACK_IMPORTED_MODULE_0__.r)((oldTraps) => ({\n    ...oldTraps,\n    get: (target, prop, receiver) => getMethod(target, prop) || oldTraps.get(target, prop, receiver),\n    has: (target, prop) => !!getMethod(target, prop) || oldTraps.has(target, prop),\n}));\n\n\n\n\n//# sourceURL=webpack://pwa-gallery/./node_modules/idb/build/esm/index.js?");
+
+/***/ }),
+
+/***/ "./node_modules/idb/build/esm/wrap-idb-value.js":
+/*!******************************************************!*\
+  !*** ./node_modules/idb/build/esm/wrap-idb-value.js ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"a\": () => /* binding */ reverseTransformCache,\n/* harmony export */   \"i\": () => /* binding */ instanceOfAny,\n/* harmony export */   \"r\": () => /* binding */ replaceTraps,\n/* harmony export */   \"u\": () => /* binding */ unwrap,\n/* harmony export */   \"w\": () => /* binding */ wrap\n/* harmony export */ });\nconst instanceOfAny = (object, constructors) => constructors.some((c) => object instanceof c);\n\nlet idbProxyableTypes;\nlet cursorAdvanceMethods;\n// This is a function to prevent it throwing up in node environments.\nfunction getIdbProxyableTypes() {\n    return (idbProxyableTypes ||\n        (idbProxyableTypes = [\n            IDBDatabase,\n            IDBObjectStore,\n            IDBIndex,\n            IDBCursor,\n            IDBTransaction,\n        ]));\n}\n// This is a function to prevent it throwing up in node environments.\nfunction getCursorAdvanceMethods() {\n    return (cursorAdvanceMethods ||\n        (cursorAdvanceMethods = [\n            IDBCursor.prototype.advance,\n            IDBCursor.prototype.continue,\n            IDBCursor.prototype.continuePrimaryKey,\n        ]));\n}\nconst cursorRequestMap = new WeakMap();\nconst transactionDoneMap = new WeakMap();\nconst transactionStoreNamesMap = new WeakMap();\nconst transformCache = new WeakMap();\nconst reverseTransformCache = new WeakMap();\nfunction promisifyRequest(request) {\n    const promise = new Promise((resolve, reject) => {\n        const unlisten = () => {\n            request.removeEventListener('success', success);\n            request.removeEventListener('error', error);\n        };\n        const success = () => {\n            resolve(wrap(request.result));\n            unlisten();\n        };\n        const error = () => {\n            reject(request.error);\n            unlisten();\n        };\n        request.addEventListener('success', success);\n        request.addEventListener('error', error);\n    });\n    promise\n        .then((value) => {\n        // Since cursoring reuses the IDBRequest (*sigh*), we cache it for later retrieval\n        // (see wrapFunction).\n        if (value instanceof IDBCursor) {\n            cursorRequestMap.set(value, request);\n        }\n        // Catching to avoid \"Uncaught Promise exceptions\"\n    })\n        .catch(() => { });\n    // This mapping exists in reverseTransformCache but doesn't doesn't exist in transformCache. This\n    // is because we create many promises from a single IDBRequest.\n    reverseTransformCache.set(promise, request);\n    return promise;\n}\nfunction cacheDonePromiseForTransaction(tx) {\n    // Early bail if we've already created a done promise for this transaction.\n    if (transactionDoneMap.has(tx))\n        return;\n    const done = new Promise((resolve, reject) => {\n        const unlisten = () => {\n            tx.removeEventListener('complete', complete);\n            tx.removeEventListener('error', error);\n            tx.removeEventListener('abort', error);\n        };\n        const complete = () => {\n            resolve();\n            unlisten();\n        };\n        const error = () => {\n            reject(tx.error || new DOMException('AbortError', 'AbortError'));\n            unlisten();\n        };\n        tx.addEventListener('complete', complete);\n        tx.addEventListener('error', error);\n        tx.addEventListener('abort', error);\n    });\n    // Cache it for later retrieval.\n    transactionDoneMap.set(tx, done);\n}\nlet idbProxyTraps = {\n    get(target, prop, receiver) {\n        if (target instanceof IDBTransaction) {\n            // Special handling for transaction.done.\n            if (prop === 'done')\n                return transactionDoneMap.get(target);\n            // Polyfill for objectStoreNames because of Edge.\n            if (prop === 'objectStoreNames') {\n                return target.objectStoreNames || transactionStoreNamesMap.get(target);\n            }\n            // Make tx.store return the only store in the transaction, or undefined if there are many.\n            if (prop === 'store') {\n                return receiver.objectStoreNames[1]\n                    ? undefined\n                    : receiver.objectStore(receiver.objectStoreNames[0]);\n            }\n        }\n        // Else transform whatever we get back.\n        return wrap(target[prop]);\n    },\n    set(target, prop, value) {\n        target[prop] = value;\n        return true;\n    },\n    has(target, prop) {\n        if (target instanceof IDBTransaction &&\n            (prop === 'done' || prop === 'store')) {\n            return true;\n        }\n        return prop in target;\n    },\n};\nfunction replaceTraps(callback) {\n    idbProxyTraps = callback(idbProxyTraps);\n}\nfunction wrapFunction(func) {\n    // Due to expected object equality (which is enforced by the caching in `wrap`), we\n    // only create one new func per func.\n    // Edge doesn't support objectStoreNames (booo), so we polyfill it here.\n    if (func === IDBDatabase.prototype.transaction &&\n        !('objectStoreNames' in IDBTransaction.prototype)) {\n        return function (storeNames, ...args) {\n            const tx = func.call(unwrap(this), storeNames, ...args);\n            transactionStoreNamesMap.set(tx, storeNames.sort ? storeNames.sort() : [storeNames]);\n            return wrap(tx);\n        };\n    }\n    // Cursor methods are special, as the behaviour is a little more different to standard IDB. In\n    // IDB, you advance the cursor and wait for a new 'success' on the IDBRequest that gave you the\n    // cursor. It's kinda like a promise that can resolve with many values. That doesn't make sense\n    // with real promises, so each advance methods returns a new promise for the cursor object, or\n    // undefined if the end of the cursor has been reached.\n    if (getCursorAdvanceMethods().includes(func)) {\n        return function (...args) {\n            // Calling the original function with the proxy as 'this' causes ILLEGAL INVOCATION, so we use\n            // the original object.\n            func.apply(unwrap(this), args);\n            return wrap(cursorRequestMap.get(this));\n        };\n    }\n    return function (...args) {\n        // Calling the original function with the proxy as 'this' causes ILLEGAL INVOCATION, so we use\n        // the original object.\n        return wrap(func.apply(unwrap(this), args));\n    };\n}\nfunction transformCachableValue(value) {\n    if (typeof value === 'function')\n        return wrapFunction(value);\n    // This doesn't return, it just creates a 'done' promise for the transaction,\n    // which is later returned for transaction.done (see idbObjectHandler).\n    if (value instanceof IDBTransaction)\n        cacheDonePromiseForTransaction(value);\n    if (instanceOfAny(value, getIdbProxyableTypes()))\n        return new Proxy(value, idbProxyTraps);\n    // Return the same value back if we're not going to transform it.\n    return value;\n}\nfunction wrap(value) {\n    // We sometimes generate multiple promises from a single IDBRequest (eg when cursoring), because\n    // IDB is weird and a single IDBRequest can yield many responses, so these can't be cached.\n    if (value instanceof IDBRequest)\n        return promisifyRequest(value);\n    // If we've already transformed this value before, reuse the transformed value.\n    // This is faster, but it also provides object equality.\n    if (transformCache.has(value))\n        return transformCache.get(value);\n    const newValue = transformCachableValue(value);\n    // Not all types are transformed.\n    // These may be primitive types, so they can't be WeakMap keys.\n    if (newValue !== value) {\n        transformCache.set(value, newValue);\n        reverseTransformCache.set(newValue, value);\n    }\n    return newValue;\n}\nconst unwrap = (value) => reverseTransformCache.get(value);\n\n\n\n\n//# sourceURL=webpack://pwa-gallery/./node_modules/idb/build/esm/wrap-idb-value.js?");
 
 /***/ }),
 
@@ -618,20 +639,32 @@ eval("\n// @ts-ignore\ntry {\n    self['workbox:strategies:6.0.2'] && _();\n}\nc
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.css */ \"./src/style.css\");\n/* harmony import */ var _pictures__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./pictures */ \"./src/pictures.js\");\n/* harmony import */ var _pictures__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_pictures__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _sw__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./sw */ \"./src/sw.js\");\n\n\n\n\nwindow.onload = start;\nwindow.addEventListener(\"beforeinstallprompt\", (e) => {\n  // Prevent the mini-infobar from appearing on mobile\n  e.preventDefault();\n  // Stash the event so it can be triggered later.\n  deferredPrompt = e;\n});\n\nserviceWorker();\n\nlet mainPicturesContainer;\nlet deferredPrompt;\nlet mainContainer\n\nfunction start() {\n  mainContainer = document.getElementById(\"main-container\");\n  let buttonAddPicture = document.getElementById(\"add-picture\");\n  let buttonInstall = document.getElementById(\"install-app\");\n  // console.log(buttonInstall)\n  buttonAddPicture.addEventListener(\"click\", addRandomPicture);\n  // pictures.forEach((picture) => {\n  //   addPicturesToDiv(mainContainer, picture);\n  // });\n\n  buttonInstall.addEventListener(\"click\", (e) => {\n    // Show the install prompt\n    console.log(\"Test Install\")\n    // deferredPrompt.prompt();\n    // // Wait for the user to respond to the prompt\n    // deferredPrompt.userChoice.then((choiceResult) => {\n    //   if (choiceResult.outcome === \"accepted\") {\n    //     console.log(\"User accepted the install prompt\");\n    //   } else {\n    //     console.log(\"User dismissed the install prompt\");\n    //   }\n    // });\n  });\n\n  // loadWebcam();\n}\n\nfunction addPicturesToDiv(div, picture) {\n  div.innerHTML += `<img class=\"fit-picture\" src=\"${picture.url}\" alt=\"\">`;\n  setTimeout(() => {\n    window.scrollTo(0, document.body.scrollHeight);\n  }, 100);\n}\n\nfunction addRandomPicture() {\n  if (window.fetch) {\n    fetch(\"https://picsum.photos/1280/720\").then(function (response) {\n      addPicturesToDiv(mainContainer, response);\n    });\n  } else {\n    console.error(\"Pas de fetch\");\n  }\n}\n\nfunction serviceWorker() {\n  if (\"serviceWorker\" in navigator) {\n    window.addEventListener(\"load\", function () {\n      navigator.serviceWorker.register('/sw.js').then(\n        function (registration) {\n          console.log(\n            \"ServiceWorker registration successful with scope: \",\n            registration.scope\n          );\n        },\n        function (err) {\n          console.log(\"ServiceWorker registration failed: \", err);\n        }\n      );\n    });\n  }\n}\n\n\n// function loadWebcam() {\n//   setTimeout(() => {\n//     Webcam.set({\n//       width: 1000,\n//       height: 240,\n//       image_format: \"jpeg\",\n//       jpeg_quality: 90,\n//     });\n//     Webcam.attach(\"#my_camera\");\n//   }, 2000);\n// }\nconst appendImageToJsonPicure = () => {\n  fs.readFile('image.json', 'utf8', function readFileCallback(err, data) {\n    if (err) {\n      console.log(err);\n    } else {\n      obj = JSON.parse(data); //now it an object\n      obj.table.push({ id: 2, square: 3 }); //add some data\n      json = JSON.stringify(obj); //convert it back to json\n      fs.writeFile('myjsonfile.json', json, 'utf8', callback); // write it back \n    }\n  });\n}\n\n\n\n//# sourceURL=webpack://pwa-gallery/./src/index.js?");
+eval("module.exports = (async () => {\n__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.css */ \"./src/style.css\");\n/* harmony import */ var _sw__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./sw */ \"./src/sw.js\");\n/* harmony import */ var _js_domInteraction__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./js/domInteraction */ \"./src/js/domInteraction.js\");\n_js_domInteraction__WEBPACK_IMPORTED_MODULE_2__ = await Promise.resolve(_js_domInteraction__WEBPACK_IMPORTED_MODULE_2__);\n\n\n\n\nlet deferredPrompt;\nwindow.onload = function() {\n  init();\n};\n\nwindow.addEventListener(\"beforeinstallprompt\", function (e) {\n  // log the platforms provided as options in an install prompt\n  console.log(e.platforms); // e.g., [\"web\", \"android\", \"windows\"]\n  e.userChoice.then(function (choiceResult) {\n    console.log(choiceResult.outcome); // either \"accepted\" or \"dismissed\"\n  }, handleError);\n});\n\nfunction init(){\nconsole.log('init');\n  let buttonAddPicture = document.getElementById(\"add-picture\");\n  let buttonInstall = document.getElementById(\"install-app\");\n  buttonAddPicture.addEventListener(\"click\", _js_domInteraction__WEBPACK_IMPORTED_MODULE_2__.addRandomPicture);\n  \n  buttonInstall.addEventListener(\"click\", (e) => {\n    console.log(deferredPrompt);\n    if (deferredPrompt) {\n      deferredPrompt.prompt();\n      deferredPrompt.userChoice.then((choiceResult) => {\n        if (choiceResult.outcome === \"accepted\") {\n          console.log(\"User accepted the install prompt\");\n        } else {\n          console.log(\"User dismissed the install prompt\");\n        }\n      });\n    }\n  });\n  (0,_js_domInteraction__WEBPACK_IMPORTED_MODULE_2__.addPictureFromDb)()\n  \n}\n\nreturn __webpack_exports__;\n})();\n\n//# sourceURL=webpack://pwa-gallery/./src/index.js?");
 
 /***/ }),
 
-/***/ "./src/pictures.js":
-/*!*************************!*\
-  !*** ./src/pictures.js ***!
-  \*************************/
-/***/ (() => {
+/***/ "./src/js/db.js":
+/*!**********************!*\
+  !*** ./src/js/db.js ***!
+  \**********************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
 
-eval("const pictures = [\n  {\n    url:\n      \"https://cdn.pixabay.com/photo/2020/12/03/12/35/sunset-5800386_1280.jpg\",\n  },\n  {\n    url: \"https://cdn.pixabay.com/photo/2020/12/04/16/08/moss-5803607_1280.jpg\",\n  },\n  {\n    url:\n      \"https://cdn.pixabay.com/photo/2020/11/22/08/06/forest-5765878_1280.jpg\",\n  },\n];\n\n\n//# sourceURL=webpack://pwa-gallery/./src/pictures.js?");
+"use strict";
+eval("module.exports = (async () => {\n__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"addPictureToDb\": () => /* binding */ addPictureToDb,\n/* harmony export */   \"getAllPictures\": () => /* binding */ getAllPictures\n/* harmony export */ });\n/* harmony import */ var idb__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! idb */ \"./node_modules/idb/build/esm/index.js\");\n\n\nconst db = await (0,idb__WEBPACK_IMPORTED_MODULE_0__.openDB)('Pictures', 1, {\n  upgrade(db) {\n    // Create a store of objects\n    const store = db.createObjectStore('Pictures', {\n      // The 'id' property of the object will be the key.\n      keyPath: 'id',\n      // If it isn't explicitly set, create a value by auto incrementing.\n      autoIncrement: true,\n    });\n    // Create an index on the 'date' property of the objects.\n    store.createIndex('date', 'date');\n  },\n}); \n\nasync function addPictureToDb(pic) {\n  if (db) {\n    console.log(await db.getAllFromIndex('Pictures', 'date'));\n    await db.add('Pictures', {\n      title: 'picture',\n      date: new Date(),\n      url: pic.url,\n    });\n  }\n}\n\nasync function getAllPictures(){\n  if (db) {\n    return await db.getAllFromIndex('Pictures', 'date')\n  }\n}\n\n\nreturn __webpack_exports__;\n})();\n\n//# sourceURL=webpack://pwa-gallery/./src/js/db.js?");
+
+/***/ }),
+
+/***/ "./src/js/domInteraction.js":
+/*!**********************************!*\
+  !*** ./src/js/domInteraction.js ***!
+  \**********************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("module.exports = (async () => {\n__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"addRandomPicture\": () => /* binding */ addRandomPicture,\n/* harmony export */   \"addPictureFromDb\": () => /* binding */ addPictureFromDb\n/* harmony export */ });\n/* harmony import */ var _db__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./db */ \"./src/js/db.js\");\n_db__WEBPACK_IMPORTED_MODULE_0__ = await Promise.resolve(_db__WEBPACK_IMPORTED_MODULE_0__);\n\n// import {} from '@fortawesome/fontawesome-free'\nlet mainContainer = document.getElementById(\"main-container\");\n\n\nfunction addPicturesToDiv(div, picture) {\n  div.innerHTML += `<div>\n  <i class=\"fas fa-user-circle fa-fw\"></i>\n                      <img class=\"fit-picture\" src=\"${picture.url}\" alt=\"\">\n                    </div>`;\n  setTimeout(() => {\n    window.scrollTo(0, document.body.scrollHeight);\n  }, 100);\n}\n\nfunction addRandomPicture() {\n  console.log('here');\n  if (window.fetch) {\n    fetch(\"https://picsum.photos/1280/720\").then(function (response) {\n      addPicturesToDiv(mainContainer, response);\n      (0,_db__WEBPACK_IMPORTED_MODULE_0__.addPictureToDb)(response)\n    });\n  } else {\n    console.error(\"Pas de fetch\");\n  }\n}\n\nasync function addPictureFromDb() {\n  let pictures = await (0,_db__WEBPACK_IMPORTED_MODULE_0__.getAllPictures)()\n\n  for (const pic of pictures) {\n    addPicturesToDiv(mainContainer, pic);\n  }\n}\nreturn __webpack_exports__;\n})();\n\n//# sourceURL=webpack://pwa-gallery/./src/js/domInteraction.js?");
 
 /***/ }),
 
@@ -641,7 +674,7 @@ eval("const pictures = [\n  {\n    url:\n      \"https://cdn.pixabay.com/photo/2
   \****************************************/
 /***/ (() => {
 
-eval("const cacheName = \"galerie-v1\";\r\n\r\n// self.addEventListener(\"activate\", e => {\r\n//   e.waitUntil(\r\n//     caches.keys().then(function(keyList) {\r\n//       return Promise.all(\r\n//         keyList.map(function(key) {\r\n//           if (key !== cacheName) {\r\n//             return caches.delete(key);\r\n//           }\r\n//         })\r\n//       );\r\n//     })\r\n//   );\r\n// });\r\n\r\nself.addEventListener('activate', function (e) {\r\n  e.waitUntil(\r\n    caches.keys().then(function (keyList) {\r\n      return Promise.all(keyList.map(function (key) {\r\n        if (key !== cacheName) {\r\n          return caches.delete(key);\r\n        }\r\n      }));\r\n    })\r\n  );\r\n});\n\n//# sourceURL=webpack://pwa-gallery/./src/service_worker/activate.js?");
+eval("const cacheName = \"galerie-v1\";\r\n\r\nself.addEventListener('activate', function (e) {\r\n  e.waitUntil(\r\n    caches.keys().then(function (keyList) {\r\n      return Promise.all(keyList.map(function (key) {\r\n        if (key !== cacheName) {\r\n          return caches.delete(key);\r\n        }\r\n      }));\r\n    })\r\n  );\r\n});\n\n//# sourceURL=webpack://pwa-gallery/./src/service_worker/activate.js?");
 
 /***/ }),
 
@@ -651,7 +684,7 @@ eval("const cacheName = \"galerie-v1\";\r\n\r\n// self.addEventListener(\"activa
   \*************************************/
 /***/ (() => {
 
-eval("const cacheName = \"galerie-v1\";\r\n\r\n// self.addEventListener(\"fetch\", event => {\r\n// \tconsole.log(event.request.url);\r\n// });\r\n\r\n// self.addEventListener(\"fetch\", (event) => {\r\n//   const url = event.request.url;\r\n\r\n//   if (url.indexOf(\"https://nostalgic-lamarr-5a666c.netlify.app/images.json\") === 0) {\r\n//     event.respondWith(\r\n//       fetch(event.request).then((response) => {\r\n//         if(response.status !== 200) {\r\n//           console.error(\r\n//             \"Service Worker\",\r\n//             \"Error when fetching\",\r\n//             event.request.url\r\n//           );\r\n\t\t  \r\n//           return response;\r\n//         }\r\n//         console.info(\"Formatting data\");\r\n\r\n//         return response.json().then((json) => {\r\n// \t\t\tconst formattedResponse = json.map((j) => ({\r\n// \t\t\t\tname: j.name,\r\n// \t\t\t\tdescription: j.description || \"\",\r\n// \t\t\t\tupdated_at: j.updated_at,\r\n// \t\t\t\turl: j.url\r\n// \t\t\t}));\r\n\r\n// \t\t\t//return new Response(JSON.stringify(formattedResponse));\r\n// \t\t\tconst finalResponse = new Response(JSON.stringify(formattedResponse));\r\n// \t\t\tlet savedResponse = finalResponse.clone();\r\n\r\n// \t\t\tcaches.open(cacheName).then(cache => {\r\n// \t\t\tcache.put(event.request,savedResponse);\r\n// \t\t\t});\r\n\r\n// \t\t\treturn finalResponse;\r\n//         });\r\n//       })\r\n//     );\r\n//   }\r\n//   else {\r\n//     event.respondWith(\r\n//       caches\r\n//         .open(cacheName)\r\n//         .then(cache => cache.match(event.request))\r\n//         .then(response => response || fetch(event.request))\r\n//     );\r\n//   }\r\n// });\r\n\r\n\r\nself.addEventListener('fetch', function (event) {\r\n  if (event.request.url.includes(\"picsum\")){\r\n    event.respondWith(\r\n      caches.open(cacheName)\r\n        .then((cache) => {\r\n          return cache.match(event.request)\r\n            .then(response => {\r\n              const fetchPromise =\r\n                fetch(event.request)\r\n                  .then(networkResponse => {\r\n                    cache.put('photo',\r\n                      networkResponse.clone());\r\n                    return networkResponse;\r\n                  })\r\n              console.log(response);\r\n              return response || fetchPromise;\r\n            })\r\n        })\r\n    )\r\n  }\r\n\r\n})\r\n\n\n//# sourceURL=webpack://pwa-gallery/./src/service_worker/fetch.js?");
+eval("const cacheName = \"galerie-v1\";\r\n\r\nself.addEventListener('fetch', function (event) {\r\n  event.respondWith(\r\n    caches.open(cacheName)\r\n      .then((cache) => {\r\n        return cache.match(event.request)\r\n          .then(response => {\r\n            const fetchPromise =\r\n              fetch(event.request)\r\n                .then(networkResponse => {\r\n                  // if (event.request.url.includes(\"picsum\")) {\r\n                  //   cache.put('photo',\r\n                  //     networkResponse.clone());\r\n                  // }\r\n                  return networkResponse;\r\n                })\r\n            return response || fetchPromise;\r\n          })\r\n      })\r\n  )\r\n\r\n})\r\n\n\n//# sourceURL=webpack://pwa-gallery/./src/service_worker/fetch.js?");
 
 /***/ }),
 
@@ -661,7 +694,7 @@ eval("const cacheName = \"galerie-v1\";\r\n\r\n// self.addEventListener(\"fetch\
   \***************************************/
 /***/ (() => {
 
-eval("const cacheName = \"galerie-v1\";\r\nconst files = [\r\n  \"/\",\r\n  \"/bundle.js\",\r\n  \"/manifest.json\",\r\n  \"/image.json\"\r\n];\r\n\r\n\r\nself.addEventListener(\"install\", e => {\r\n  caches.open(cacheName).then(cache => {\r\n    cache.addAll(files);\r\n  });\r\n});\n\n//# sourceURL=webpack://pwa-gallery/./src/service_worker/install.js?");
+eval("const cacheName = \"galerie-v1\";\r\nconst files = [\r\n  \"/\",\r\n  \"/bundle.js\",\r\n  \"/manifest.webmanifest\",\r\n  \"/image.json\",\r\n];\r\n\r\nself.addEventListener(\"install\", e => {\r\n  caches.open(cacheName).then(cache => {\r\n    cache.addAll(files);\r\n  });\r\n});\n\n//# sourceURL=webpack://pwa-gallery/./src/service_worker/install.js?");
 
 /***/ }),
 
@@ -672,80 +705,78 @@ eval("const cacheName = \"galerie-v1\";\r\nconst files = [\r\n  \"/\",\r\n  \"/b
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _service_worker_install_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./service_worker/install.js */ \"./src/service_worker/install.js\");\n/* harmony import */ var _service_worker_install_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_service_worker_install_js__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _service_worker_activate_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./service_worker/activate.js */ \"./src/service_worker/activate.js\");\n/* harmony import */ var _service_worker_activate_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_service_worker_activate_js__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _service_worker_fetch_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./service_worker/fetch.js */ \"./src/service_worker/fetch.js\");\n/* harmony import */ var _service_worker_fetch_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_service_worker_fetch_js__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var workbox_precaching__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! workbox-precaching */ \"./node_modules/workbox-precaching/index.mjs\");\n\n\n\n\nconst cacheName = \"galerie-v1\";\n\n\n(0,workbox_precaching__WEBPACK_IMPORTED_MODULE_3__.precacheAndRoute)(self.__WB_MANIFEST || []);\n\n\n\n\n//# sourceURL=webpack://pwa-gallery/./src/sw.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _service_worker_install_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./service_worker/install.js */ \"./src/service_worker/install.js\");\n/* harmony import */ var _service_worker_install_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_service_worker_install_js__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _service_worker_activate_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./service_worker/activate.js */ \"./src/service_worker/activate.js\");\n/* harmony import */ var _service_worker_activate_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_service_worker_activate_js__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _service_worker_fetch_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./service_worker/fetch.js */ \"./src/service_worker/fetch.js\");\n/* harmony import */ var _service_worker_fetch_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_service_worker_fetch_js__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var workbox_precaching__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! workbox-precaching */ \"./node_modules/workbox-precaching/index.mjs\");\n\n\n\n\n\n(0,workbox_precaching__WEBPACK_IMPORTED_MODULE_3__.precacheAndRoute)(self.__WB_MANIFEST || []);\n\n\n\n//# sourceURL=webpack://pwa-gallery/./src/sw.js?");
 
 /***/ })
 
-/******/ 	});
+/******/ });
 /************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		if(__webpack_module_cache__[moduleId]) {
-/******/ 			return __webpack_module_cache__[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			id: moduleId,
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
+/******/ // The module cache
+/******/ var __webpack_module_cache__ = {};
+/******/ 
+/******/ // The require function
+/******/ function __webpack_require__(moduleId) {
+/******/ 	// Check if module is in cache
+/******/ 	if(__webpack_module_cache__[moduleId]) {
+/******/ 		return __webpack_module_cache__[moduleId].exports;
 /******/ 	}
-/******/ 	
+/******/ 	// Create a new module (and put it into the cache)
+/******/ 	var module = __webpack_module_cache__[moduleId] = {
+/******/ 		id: moduleId,
+/******/ 		// no module.loaded needed
+/******/ 		exports: {}
+/******/ 	};
+/******/ 
+/******/ 	// Execute the module function
+/******/ 	__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 
+/******/ 	// Return the exports of the module
+/******/ 	return module.exports;
+/******/ }
+/******/ 
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => module['default'] :
-/******/ 				() => module;
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
+/******/ /* webpack/runtime/compat get default export */
+/******/ (() => {
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = (module) => {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			() => module['default'] :
+/******/ 			() => module;
+/******/ 		__webpack_require__.d(getter, { a: getter });
+/******/ 		return getter;
+/******/ 	};
+/******/ })();
+/******/ 
+/******/ /* webpack/runtime/define property getters */
+/******/ (() => {
+/******/ 	// define getter functions for harmony exports
+/******/ 	__webpack_require__.d = (exports, definition) => {
+/******/ 		for(var key in definition) {
+/******/ 			if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 				Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop)
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
+/******/ 		}
+/******/ 	};
+/******/ })();
+/******/ 
+/******/ /* webpack/runtime/hasOwnProperty shorthand */
+/******/ (() => {
+/******/ 	__webpack_require__.o = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop)
+/******/ })();
+/******/ 
+/******/ /* webpack/runtime/make namespace object */
+/******/ (() => {
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = (exports) => {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/ })();
+/******/ 
 /************************************************************************/
-/******/ 	// startup
-/******/ 	// Load entry module
-/******/ 	__webpack_require__("./src/index.js");
-/******/ 	// This entry module used 'exports' so it can't be inlined
-/******/ })()
-;
+/******/ // startup
+/******/ // Load entry module
+/******/ __webpack_require__("./src/index.js");
+/******/ // This entry module used 'module' so it can't be inlined

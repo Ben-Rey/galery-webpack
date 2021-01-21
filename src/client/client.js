@@ -11,7 +11,7 @@ if ("serviceWorker" in navigator) {
 
 
 async function send() {
-  const register = navigator.serviceWorker
+  const register = await navigator.serviceWorker
     .register("/sw.js",{updateViaCache: 'none'})
     .then((reg) => {
       console.log("Votre service worker a été enregistré!");

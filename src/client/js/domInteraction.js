@@ -3,11 +3,19 @@ import '@fortawesome/fontawesome-free/js/all.js'
 
 let mainContainer = document.getElementById("main-container");
 
+export function handleFavorite(e){
+  const color = e.target.style.color;
+  e.target.style.color = color == 'red'? 'black' : 'red'; // color is set then clear it, otherwise set to 'red'
+}
 
-function addPicturesToDiv(div, picture) {
+
+function addPicturesToDiv(div, picture, favorite) {
+  favorite = false
   div.innerHTML += `<div>
-  <i class="fas fa-heart"></i>
-                      <img class="fit-picture" src="${picture.url}" alt="">
+                      <div id="favorite-heart" style="color:${favorite ? 'red' : 'black'}">
+                        <i class="fas fa-heart"  style="pointer-events: none;" ></i>                    
+                      </div>
+                      <img class="fit-picture "src="${picture.url}" alt="">
                     </div>`;
   setTimeout(() => {
     window.scrollTo(0, document.body.scrollHeight);

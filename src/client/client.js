@@ -1,10 +1,10 @@
 import './style.css';
 import './sw'
-import { addPictureFromDb, addRandomPicture, handleFavorite} from './js/domInteraction'
+import { addPictureFromDb, addRandomPicture, handleFavorite } from './js/domInteraction'
 
 const publicKey = "BJUZgBWz1ctYaCXtxs8ks2TgFfR9ehswDHDjS-kIRQ4suyy247IOHJ8skbFZLtZNIreJUevpyvi9p4QYFag-MpU"
 if ("serviceWorker" in navigator) {
-    send().catch(err => console.error(err));
+  send().catch(err => console.error(err));
 } else {
   console.warn("Service workers are not supported.");
 }
@@ -12,19 +12,19 @@ if ("serviceWorker" in navigator) {
 
 async function send() {
   const register = await navigator.serviceWorker
-    .register("/sw.js",{updateViaCache: 'none'})
+    .register("/sw.js", { updateViaCache: 'none' })
     .then((reg) => {
       console.log("Votre service worker a été enregistré!");
-      reg.addEventListener('updatefound', () => { 
-          const installing = reg.installing;
-          installing.addEventListener('statechange', () => { 
-          if(installing.state === 'installed'){ 
-               // Afficher un message aux utilisateurs 
-               console.log("Votre service worker a été mis à jour! Veuillez rafraichir la page"); 
-          } 
-      }); 
+      reg.addEventListener('updatefound', () => {
+        const installing = reg.installing;
+        installing.addEventListener('statechange', () => {
+          if (installing.state === 'installed') {
+            // Afficher un message aux utilisateurs 
+            console.log("Votre service worker a été mis à jour! Veuillez rafraichir la page");
+          }
+        });
       });
-    
+
     })
     .catch((error) => {
       console.error(error);
@@ -92,11 +92,11 @@ buttonInstall.addEventListener("click", (e) => {
 });
 
 
-document.addEventListener('click',function(e){
-  if(e.target && e.target.id== 'favorite-heart'){
+document.addEventListener('click', function (e) {
+  if (e.target && e.target.id == 'favorite-heart') {
     e.preventDefault()
-        handleFavorite(e)
-   }
+    handleFavorite(e)
+  }
 });
 
 addPictureFromDb()

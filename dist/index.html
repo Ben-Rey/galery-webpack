@@ -12,30 +12,7 @@
     <link rel="apple-touch-icon" href="/favicon.ico" />
     <title>pwa</title>
 
-    <script>
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker
-          .register("/sw.js",{updateViaCache: 'none'})
-          .then((reg) => {
-            console.log("Votre service worker a été enregistré!");
-			reg.addEventListener('updatefound', () => { 
-				const installing = reg.installing;
-				installing.addEventListener('statechange', () => { 
-				if(installing.state === 'installed'){ 
-					 // Afficher un message aux utilisateurs 
-					 console.log("Votre service worker a été mis à jour! Veuillez rafraichir la page"); 
-				} 
-			}); 
-			});
-		  
-		  })
-          .catch((error) => {
-            console.error(error);
-          });
-      } else {
-        console.warn("Service workers are not supported.");
-      }
-    </script>
+    <script type="application/javascript" src="../src/client/client.js"></script>
   </head>
   <body>
     <header>

@@ -1,6 +1,6 @@
 import './style.css';
 import './sw'
-import { addPictureFromDb, addRandomPicture } from './js/domInteraction'
+import { addPictureFromDb, addRandomPicture, handleFavorite} from './js/domInteraction'
 
 const publicKey = "BJUZgBWz1ctYaCXtxs8ks2TgFfR9ehswDHDjS-kIRQ4suyy247IOHJ8skbFZLtZNIreJUevpyvi9p4QYFag-MpU"
 if ("serviceWorker" in navigator) {
@@ -72,6 +72,8 @@ window.addEventListener("beforeinstallprompt", (e) => {
 let deferredPrompt;
 let buttonAddPicture = document.getElementById("add-picture");
 let buttonInstall = document.getElementById("install-app");
+let buttonFavorite = document.getElementById("favorite-heart");
+
 
 buttonAddPicture.addEventListener("click", addRandomPicture);
 
@@ -88,5 +90,14 @@ buttonInstall.addEventListener("click", (e) => {
     });
   }
 });
+
+
+document.addEventListener('click',function(e){
+  if(e.target && e.target.id== 'favorite-heart'){
+    e.preventDefault()
+        handleFavorite(e)
+   }
+});
+
 addPictureFromDb()
 

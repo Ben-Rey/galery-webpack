@@ -4,6 +4,7 @@ body {
 
 header {
   position: fixed;
+  z-index: 100;
   top: 0;
   font-family: "Open Sans", sans-serif;
   min-height: 10vh;
@@ -62,4 +63,13 @@ header {
   header {
     flex-direction: column;
   }
+}
+
+#favorite-heart{
+  position:absolute;
+  margin: 2%;
+}
+
+#favorite-heart:hover{
+  cursor: pointer;
 }

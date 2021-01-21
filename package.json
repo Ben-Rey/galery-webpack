@@ -23,9 +23,11 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.2",
+    "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "fs": "0.0.1-security",
     "idb": "^6.0.0",
     "serviceworker-webpack-plugin": "^1.0.1",
-    "workbox-precaching": "^6.0.2"
+    "workbox-precaching": "^6.0.2",
+    "yarn": "^1.22.10"
   }
 }

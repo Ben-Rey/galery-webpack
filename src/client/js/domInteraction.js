@@ -5,7 +5,7 @@ let mainContainer = document.getElementById("main-container");
 
 function addPicturesToDiv(div, picture) {
   div.innerHTML += `<div>
-  <i class="fas fa-user-circle fa-fw"></i>
+  <i class="fas fa-user-circle fa-fw">dfsgdsfgsd</i>
                       <img class="fit-picture" src="${picture.url}" alt="">
                     </div>`;
   setTimeout(() => {

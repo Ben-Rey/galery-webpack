@@ -3,7 +3,7 @@ const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 
 module.exports = {
     mode: 'production',
-    entry:['./src/index.js'],
+    entry:['./src/client/client.js'],
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist'),
@@ -33,7 +33,7 @@ module.exports = {
     },
     plugins: [
         new WorkboxWebpackPlugin.InjectManifest({
-            swSrc: './src/sw.js',
+            swSrc: './src/client/sw.js',
             swDest: 'sw.js'
         })
     ]

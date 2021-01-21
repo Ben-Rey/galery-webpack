@@ -32,6 +32,7 @@ webpush.setVapidDetails(
 
 // Subscribe Route
 app.post("/subscribe", (req, res) => {
+    console.log(req)
     // Add a post
     db.get('images')
         .push({ title: req.body.title, url: req.body.url })

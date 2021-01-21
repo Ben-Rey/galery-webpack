@@ -7,24 +7,31 @@ const publicKey = "BJUZgBWz1ctYaCXtxs8ks2TgFfR9ehswDHDjS-kIRQ4suyy247IOHJ8skbFZL
 
 
 async function send() {
-  const register = await navigator.serviceWorker
-    .register("/sw.js", { updateViaCache: 'none' })
-    .then((reg) => {
-      console.log("Votre service worker a été enregistré!");
-      reg.addEventListener('updatefound', () => {
-        const installing = reg.installing;
-        installing.addEventListener('statechange', () => {
-          if (installing.state === 'installed') {
-            // Afficher un message aux utilisateurs 
-            console.log("Votre service worker a été mis à jour! Veuillez rafraichir la page");
-          }
-        });
-      });
+  console.log("Registering service worker...");
+  const register = await navigator.serviceWorker.register("/worker.js", {
+    scope: "/"
+  });
+  console.log("Service Worker Registered...");
 
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  // const register = await navigator.serviceWorker
+  //   .register("/sw.js", { updateViaCache: 'none' })
+  //   .then((reg) => {
+  //     console.log("Votre service worker a été enregistré!");
+  //     reg.addEventListener('updatefound', () => {
+  //       const installing = reg.installing;
+  //       installing.addEventListener('statechange', () => {
+  //         if (installing.state === 'installed') {
+  //           // Afficher un message aux utilisateurs 
+  //           console.log("Votre service worker a été mis à jour! Veuillez rafraichir la page");
+  //         }
+  //       });
+  //     });
+
+  //   })
+  //   .catch((error) => {
+  //     console.error(error);
+  //   });
+  
   console.log("Enregistrement du push");
   const subscription = await register.pushManager.subscribe({
     userVisibleOnly: true,

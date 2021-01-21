@@ -8,7 +8,11 @@ const publicKey = "BJUZgBWz1ctYaCXtxs8ks2TgFfR9ehswDHDjS-kIRQ4suyy247IOHJ8skbFZL
 
 async function send() {
   console.log("Registering service worker...");
-  const register = await navigator.serviceWorker.register("/sw.js");
+
+  const register = await navigator.serviceWorker.register("/sw.js", {
+    scope: "/"
+  });
+
   console.log("Service Worker Registered...");
 
   // const register = await navigator.serviceWorker
@@ -38,7 +42,7 @@ async function send() {
   console.log("Votre push a été enregistré");
 
   console.log("Envoi de push");
-  await fetch("/subscribe", {
+  await fetch("http://localhost:5000/subscribe", {
     method: "POST",
     body: JSON.stringify(subscription),
     headers: {

@@ -3,11 +3,7 @@ import './sw'
 import { addPictureFromDb, addRandomPicture, handleFavorite } from './js/domInteraction'
 
 const publicKey = "BJUZgBWz1ctYaCXtxs8ks2TgFfR9ehswDHDjS-kIRQ4suyy247IOHJ8skbFZLtZNIreJUevpyvi9p4QYFag-MpU"
-if ("serviceWorker" in navigator) {
-  send().catch(err => console.error(err));
-} else {
-  console.warn("Service workers are not supported.");
-}
+
 
 
 async function send() {
@@ -95,6 +91,11 @@ buttonInstall.addEventListener("click", (e) => {
 document.addEventListener('click', function (e) {
   if (e.target && e.target.id == 'favorite-heart') {
     e.preventDefault()
+    if ("serviceWorker" in navigator) {
+      send().catch(err => console.error(err));
+    } else {
+      console.warn("Service workers are not supported.");
+    }
     handleFavorite(e)
   }
 });

@@ -1,11 +1,12 @@
 import { addPictureToDb, getAllPictures } from './db'
-// import {} from '@fortawesome/fontawesome-free'
+import '@fortawesome/fontawesome-free/js/all.js'
+
 let mainContainer = document.getElementById("main-container");
 
 
 function addPicturesToDiv(div, picture) {
   div.innerHTML += `<div>
-  <i class="fas fa-user-circle fa-fw">dfsgdsfgsd</i>
+  <i class="fas fa-heart"></i>
                       <img class="fit-picture" src="${picture.url}" alt="">
                     </div>`;
   setTimeout(() => {

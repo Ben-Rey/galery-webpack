@@ -8,9 +8,7 @@ const publicKey = "BJUZgBWz1ctYaCXtxs8ks2TgFfR9ehswDHDjS-kIRQ4suyy247IOHJ8skbFZL
 
 async function send() {
   console.log("Registering service worker...");
-  const register = await navigator.serviceWorker.register("/worker.js", {
-    scope: "/"
-  });
+  const register = await navigator.serviceWorker.register("/sw.js");
   console.log("Service Worker Registered...");
 
   // const register = await navigator.serviceWorker
@@ -31,7 +29,7 @@ async function send() {
   //   .catch((error) => {
   //     console.error(error);
   //   });
-  
+
   console.log("Enregistrement du push");
   const subscription = await register.pushManager.subscribe({
     userVisibleOnly: true,

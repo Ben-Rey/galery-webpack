@@ -3,9 +3,15 @@ import './sw'
 import { addPictureFromDb, addRandomPicture } from './js/domInteraction'
 
 const publicKey = "BJUZgBWz1ctYaCXtxs8ks2TgFfR9ehswDHDjS-kIRQ4suyy247IOHJ8skbFZLtZNIreJUevpyvi9p4QYFag-MpU"
-
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker
+    send().catch(err => console.error(err));
+} else {
+  console.warn("Service workers are not supported.");
+}
+
+
+async function send() {
+  const register = navigator.serviceWorker
     .register("/sw.js",{updateViaCache: 'none'})
     .then((reg) => {
       console.log("Votre service worker a été enregistré!");
@@ -23,13 +29,6 @@ if ("serviceWorker" in navigator) {
     .catch((error) => {
       console.error(error);
     });
-    send().catch(err => console.error(err));
-} else {
-  console.warn("Service workers are not supported.");
-}
-
-
-async function send() {
   console.log("Enregistrement du push");
   const subscription = await register.pushManager.subscribe({
     userVisibleOnly: true,

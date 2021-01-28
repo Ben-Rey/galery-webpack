@@ -6,6 +6,7 @@
   "scripts": {
     "start": "http-server dist",
     "start:dev": "webpack serve",
+    "start:serveur": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack"
   },
@@ -27,7 +28,6 @@
     "cors": "^2.8.5",
     "fs": "0.0.1-security",
     "idb": "^6.0.0",
-    "loader": "^2.1.1",
     "lowdb": "^1.0.0",
     "serviceworker-webpack-plugin": "^1.0.1",
     "web-push": "^3.4.4",

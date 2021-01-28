@@ -71,6 +71,7 @@ buttonInstall.addEventListener("click", (e) => {
       }
     });
   }
+  
 });
 
 
@@ -80,7 +81,12 @@ document.addEventListener('click', function (e) {
     e.preventDefault()
     // console.log(e.target.getAttribute("favorite"));
     if ("serviceWorker" in navigator) {
+      if(status = 'granted'){
+        navigator.serviceWorker.ready 
+        .then(reg => reg.sync.register('syncfav'))
+      }
       sendFavorite(e.target.getAttribute("url"), !favorite).catch(err => console.error(err));
+      
     } else {
       console.warn("Service workers are not supported.");
     }
@@ -89,16 +95,3 @@ document.addEventListener('click', function (e) {
 });
 
 addPictureFromDb()
-
-registerBackgroundSync()
-
-async function registerBackgroundSync() {
-  if (!navigator.serviceWorker){
-      return console.error("Service Worker not supported")
-  }
-
-  navigator.serviceWorker.ready
-  .then(registration => registration.sync.register('syncfav'))
-  .then(() => console.log("Registered background sync"))
-  .catch(err => console.error("Error registering background sync", err))
-}

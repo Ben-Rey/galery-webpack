@@ -6,7 +6,7 @@
 ## Commande pour lancer le serveur de notification :  
 npm run start:server
 
-#Stratégie  
+## Stratégie  
 Nous ne sommes pas parti de la correction  
 Notre application requette l'API picsum afin d'ajouter des images random.
 

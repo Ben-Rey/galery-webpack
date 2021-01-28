@@ -3,16 +3,17 @@ import '@fortawesome/fontawesome-free/js/all.js'
 
 let mainContainer = document.getElementById("main-container");
 
-export function handleFavorite(e){
+export function handleFavorite(e) {
+  console.log(e.target);
   const color = e.target.style.color;
-  e.target.style.color = color == 'red'? 'black' : 'red'; // color is set then clear it, otherwise set to 'red'
+  e.target.style.color = color == 'red' ? 'black' : 'red'; // color is set then clear it, otherwise set to 'red'
 }
 
 
 function addPicturesToDiv(div, picture, favorite) {
   favorite = false
   div.innerHTML += `<div>
-                      <div id="favorite-heart" style="color:${favorite ? 'red' : 'black'}">
+                      <div id="favorite-heart" style="color:${favorite ? 'red' : 'black'}" url=${picture.url}>
                         <i class="fas fa-heart"  style="pointer-events: none;" ></i>                    
                       </div>
                       <img class="fit-picture "src="${picture.url}" alt="">

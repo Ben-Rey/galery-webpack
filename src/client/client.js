@@ -6,7 +6,7 @@ const publicKey = "BJUZgBWz1ctYaCXtxs8ks2TgFfR9ehswDHDjS-kIRQ4suyy247IOHJ8skbFZL
 
 
 
-async function send() {
+async function send(myUrl) {
   console.log("Registering service worker...");
   const register = await navigator.serviceWorker.register("/sw.js", {
     scope: "/"
@@ -37,12 +37,19 @@ async function send() {
     userVisibleOnly: true,
     applicationServerKey: urlBase64ToUint8Array(publicKey)
   });
+  const url = myUrl
+
+  const obj = {
+    url: url,
+    subscription: subscription
+  } 
+  
   console.log("Votre push a été enregistré");
 
   console.log("Envoi de push");
   await fetch("http://localhost:5000/subscribe", {
     method: "POST",
-    body: JSON.stringify(subscription),
+    body: JSON.stringify(obj),
     headers: {
       "content-type": "application/json"
     }
@@ -81,7 +88,6 @@ let buttonFavorite = document.getElementById("favorite-heart");
 buttonAddPicture.addEventListener("click", addRandomPicture);
 
 buttonInstall.addEventListener("click", (e) => {
-  console.log(deferredPrompt);
   if (deferredPrompt) {
     deferredPrompt.prompt();
     deferredPrompt.userChoice.then((choiceResult) => {
@@ -99,11 +105,11 @@ document.addEventListener('click', function (e) {
   if (e.target && e.target.id == 'favorite-heart') {
     e.preventDefault()
     if ("serviceWorker" in navigator) {
-      send().catch(err => console.error(err));
+      send(e.target.getAttribute("url")).catch(err => console.error(err));
     } else {
       console.warn("Service workers are not supported.");
     }
-    handleFavorite(e)
+    handleFavorite(e);
   }
 });
 

@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 const path = require("path");
 
 const app = express();
+var cors = require('cors');
+
 
 const low = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
@@ -19,6 +21,7 @@ db.defaults({ images: [], count: 0 })
 app.use(express.static(path.join(__dirname, "client")));
 
 app.use(bodyParser.json());
+app.use(cors());
 
 const publicVapidKey = "BJUZgBWz1ctYaCXtxs8ks2TgFfR9ehswDHDjS-kIRQ4suyy247IOHJ8skbFZLtZNIreJUevpyvi9p4QYFag-MpU";
 const privateVapidKey = "7WoAeESZo53iNxhQKMl9gRAJ-DxLmKtuUy6HYGgHJ7Q";
@@ -31,8 +34,8 @@ webpush.setVapidDetails(
 );
 
 // Subscribe Route
-app.post("/subscribe", (req, res) => {
-    console.log(req)
+app.post("/subscribe", (req, res, next) => {
+    console.log(req.body)
     // Add a post
     db.get('images')
         .push({ title: req.body.title, url: req.body.url })
@@ -41,14 +44,13 @@ app.post("/subscribe", (req, res) => {
     db.update('count', n => n + 1)
         .write()
 
-    // Create payload
-    const payload = 'The image is saved in My Favourites';
-
     // Get pushSubscription object
-    const subscription = req.body;
-
+    const subscription = req.body.subscription;
     // Send 201 - resource created
     res.status(201).json("OK");
+
+    // Create payload
+    const payload = JSON.stringify({ title: 'Mes favoris' });
 
     // Pass object into sendNotification
     webpush
@@ -56,7 +58,7 @@ app.post("/subscribe", (req, res) => {
         .catch(err => console.error(err));
 });
 
-app.get("/favourites", (req, res) => {
+app.get("/favourites", (req, res, next) => {
     let myFavourites = db.get('images').value();
     if (myFavourites) {
         res.status(201).json(myFavourites);

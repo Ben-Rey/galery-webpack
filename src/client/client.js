@@ -4,6 +4,11 @@ import { addPictureFromDb, addRandomPicture, handleFavorite } from './js/domInte
 
 const publicKey = "BJUZgBWz1ctYaCXtxs8ks2TgFfR9ehswDHDjS-kIRQ4suyy247IOHJ8skbFZLtZNIreJUevpyvi9p4QYFag-MpU"
 
+let deferredPrompt;
+let buttonAddPicture = document.getElementById("add-picture");
+let buttonInstall = document.getElementById("install-app");
+let offlineDiv = document.getElementById("offline");
+
 const register = await navigator.serviceWorker.register("/sw.js", {
   scope: "/"
 });
@@ -50,9 +55,16 @@ window.addEventListener("beforeinstallprompt", (e) => {
   deferredPrompt = e;
 });
 
-let deferredPrompt;
-let buttonAddPicture = document.getElementById("add-picture");
-let buttonInstall = document.getElementById("install-app");
+window.addEventListener("online", ()=>{
+  offlineDiv.style.height = '0rem';
+  offlineDiv.innerHTML = ""
+});
+window.addEventListener("offline", ()=>{
+  console.log("offline");
+  offlineDiv.style.height = '2rem';
+  offlineDiv.innerHTML = "You are offline"
+});
+
 
 buttonAddPicture.addEventListener("click", addRandomPicture);
 

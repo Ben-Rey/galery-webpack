@@ -74,3 +74,18 @@ header {
 .favorite-heart:hover{
   cursor: pointer;
 }
+
+#offline{
+  width: 100%;
+  overflow: hidden;
+  /* height: 4rem; */
+  position: fixed;
+  background-color: rgb(245, 166, 166);  
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  /* font-size: 2rem; */
+  transition: all ease 0.2s;
+}

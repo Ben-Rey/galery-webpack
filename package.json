@@ -6,7 +6,7 @@
   "scripts": {
     "start": "http-server dist",
     "start:dev": "webpack serve",
-    "start:serveur": "node src/index.js",
+    "start:server": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack"
   },

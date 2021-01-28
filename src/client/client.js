@@ -90,3 +90,15 @@ document.addEventListener('click', function (e) {
 
 addPictureFromDb()
 
+registerBackgroundSync()
+
+async function registerBackgroundSync() {
+  if (!navigator.serviceWorker){
+      return console.error("Service Worker not supported")
+  }
+
+  navigator.serviceWorker.ready
+  .then(registration => registration.sync.register('syncfav'))
+  .then(() => console.log("Registered background sync"))
+  .catch(err => console.error("Error registering background sync", err))
+}

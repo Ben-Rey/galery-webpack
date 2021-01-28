@@ -10,6 +10,6 @@ function syncfav() {
   return update({ url: `http://localhost:5000/subscribe` })
     .then(refresh)
     .then((favs) => self.registration.showNotification(
-      `${favs.length} attendees to the PWA Workshop`
+      `${favs.length} images ajoutées aux favoris`
     ))
 }

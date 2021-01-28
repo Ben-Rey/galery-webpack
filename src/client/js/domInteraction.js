@@ -7,18 +7,20 @@ export function handleFavorite(e) {
   // IndexedDB
   AddFavorite(e.target.getAttribute("url"))
   // FRONT
-  const favorite = !e.target.getAttribute("favorite");
-  console.log(favorite);
   const color = e.target.style.color;
   e.target.style.color = color == 'red' ? 'black' : 'red'; // color is set then clear it, otherwise set to 'red'
-  e.target.setAttribute("favorite", favorite);
+  // let buttonFavorite = document.getElementsByClassName("favorite-heart");
+  let favorite = (e.target.getAttribute("favorite") == 'true');
+  favorite = !favorite
+  console.log(favorite);
+  e.target.setAttribute("favorite", favorite.toString());
 }
 
 
 function addPicturesToDiv(div, picture, favorite) {
   favorite = picture.favorite ? picture.favorite : false
   div.innerHTML += `<div>
-                      <div id="favorite-heart" style="color:${favorite ? 'red' : 'black'}" url=${picture.url} favorite=${favorite}>
+                      <div class="favorite-heart" style="color:${favorite ? 'red' : 'black'}" url=${picture.url} favorite=${favorite}>
                         <i class="fas fa-heart"  style="pointer-events: none;" ></i>                    
                       </div>
                       <img class="fit-picture "src="${picture.url}" alt="">

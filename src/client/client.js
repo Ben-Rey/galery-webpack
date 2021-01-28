@@ -15,6 +15,7 @@ async function sendFavorite(url, favorite) {
   });
 
   const verb = favorite ? 'POST' : 'DELETE'
+  console.log(verb);
   const obj = {
     url: url,
     subscription: subscription
@@ -53,8 +54,6 @@ window.addEventListener("beforeinstallprompt", (e) => {
 let deferredPrompt;
 let buttonAddPicture = document.getElementById("add-picture");
 let buttonInstall = document.getElementById("install-app");
-let buttonFavorite = document.getElementById("favorite-heart");
-
 
 buttonAddPicture.addEventListener("click", addRandomPicture);
 
@@ -73,11 +72,12 @@ buttonInstall.addEventListener("click", (e) => {
 
 
 document.addEventListener('click', function (e) {
-  if (e.target && e.target.id == 'favorite-heart') {
+  favorite = (e.target.getAttribute("favorite") == 'true')
+  if (e.target && e.target.getAttribute("class") == 'favorite-heart') {
     e.preventDefault()
     // console.log(e.target.getAttribute("favorite"));
     if ("serviceWorker" in navigator) {
-      sendFavorite(e.target.getAttribute("url"), e.target.getAttribute("favorite")).catch(err => console.error(err));
+      sendFavorite(e.target.getAttribute("url"), !favorite).catch(err => console.error(err));
     } else {
       console.warn("Service workers are not supported.");
     }

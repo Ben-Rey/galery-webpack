@@ -12,4 +12,4 @@ Notre application requette l'API picsum afin d'ajouter des images random.
 
 Nous stockons les images avec indexDB  
 
-La partie Background Sync n'est pas terminée. Elle envoie bien les requetes mises dans indexedDb mais cela ne renvoit pas de notification push.
+Lorsque l'utilisateur enregistre une image dans ses favoris et qu'il est hors ligne, une tache est stockée dans indexDB permettant la synchronisation du server une fois la connexion rétablie.

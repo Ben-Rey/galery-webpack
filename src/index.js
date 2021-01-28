@@ -35,7 +35,6 @@ webpush.setVapidDetails(
 
 // Subscribe Route
 app.post("/subscribe", (req, res) => {
-    console.log(req.body)
     // Add a post
     db.get('images')
         .push({ url: req.body.url })
@@ -60,17 +59,12 @@ app.post("/subscribe", (req, res) => {
 
 // Remove from favourites Route
 app.delete("/subscribe", (req, res) => {
-
-    console.log(db.get('images')
-        .find({ url: req.body.url })
-        .value())
-
     db.get('images')
         .remove({ url: req.body.url })
         .write()
 
     // Increment count
-    db.update('count', n => n + 1)
+    db.update('count', n => n -1 )
         .write()
 
     // Get pushSubscription object

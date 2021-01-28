@@ -1,9 +1,28 @@
 import './style.css';
 import './sw'
-import './js/offline'
+import { addSyncTask} from './js/db'
+
 import { addPictureFromDb, addRandomPicture, handleFavorite } from './js/domInteraction'
 
 const publicKey = "BJUZgBWz1ctYaCXtxs8ks2TgFfR9ehswDHDjS-kIRQ4suyy247IOHJ8skbFZLtZNIreJUevpyvi9p4QYFag-MpU"
+
+let offlineDiv = document.getElementById("offline");
+let navigatorOnline = true
+if (!navigator.onLine) {
+    navigatorOnline = false
+    offlineDiv.style.height = '2rem';
+    offlineDiv.innerHTML = "You are offline"
+  }
+  window.addEventListener("online", () => {
+    navigatorOnline = true
+    offlineDiv.style.height = '0rem';
+    offlineDiv.innerHTML = ""
+  });
+  window.addEventListener("offline", () => {
+    navigatorOnline = false
+    offlineDiv.style.height = '2rem';
+    offlineDiv.innerHTML = "You are offline"
+  });
 
 let deferredPrompt;
 let buttonAddPicture = document.getElementById("add-picture");
@@ -26,15 +45,26 @@ async function sendFavorite(url, favorite) {
 
   const obj = {
     url: url,
+    favorite: favorite,
     subscription: subscription
   }
-  await fetch("http://localhost:5000/subscribe", {
-    method: verb,
-    body: JSON.stringify(obj),
-    headers: {
-      "content-type": "application/json"
-    }
-  });
+  if (navigatorOnline) {
+    await fetch("http://localhost:5000/subscribe", {
+      method: verb,
+      body: JSON.stringify(obj),
+      headers: {
+        "content-type": "application/json"
+      }
+    });
+  }else{
+    // Save in index db the object
+    addSyncTask( {
+      url: url,
+      favorite: favorite,
+    })
+
+  }
+
 }
 
 function urlBase64ToUint8Array(base64String) {

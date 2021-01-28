@@ -1,28 +1,73 @@
+const idb = require('idb')
+const openDB = idb.openDB
+// import { openDB } from 'idb';
 
-self.addEventListener('sync', function (event) {
-  if (event.tag == 'POST') {
-    event.waitUntil(favoriteUpdate('POST'));
-  }
-  else if (event.tag == 'DELETE'){
-    event.waitUntil(favoriteUpdate('DELETE'));
 
-  }
+
+self.addEventListener('sync', async function (event) {
+
+
+  event.waitUntil(favoriteUpdate());
+
+
 });
 
-function favoriteUpdate(verb) {
-  console.log('In Sync')
+async function favoriteUpdate() {
+  // register.pushManager.subscribe({
+  //   userVisibleOnly: true,
+  //   applicationServerKey: urlBase64ToUint8Array(publicKey)
+  // }).then((subscription)=>{
 
-  const obj = {"title": "ede"}
+  // })
+  // Db index recuperer tous les objets
 
-  return fetch("http://localhost:5000/subscribe", {
-    method: verb,
-    body: JSON.stringify(obj),
-    headers: {
-      "content-type": "application/json"
-    }
-  })
-    .then((result) => {
-      console.log(result);
+  const tasks = await getAllTasks()
+
+  let promises = []
+
+  tasks.forEach((task, i) => {
+
+    console.log("in SYNC");
+    const verb = task.favorite ? 'POST' : 'DELETE'
+    promises.push(fetch("http://localhost:5000/subscribe", {
+      method: verb,
+      body: JSON.stringify(task.url),
+      headers: {
+        "content-type": "application/json"
+      }
     })
-  // .then((favs) => console.log(favs))
+      .then((result) => {
+        console.log(result);
+      }))
+  })
+
+  return Promise.all(promises).then(() => { 
+    console.log('done');
+    deleteAllTasks()
+  }
+  );
+
+}
+
+
+
+
+
+
+async function getAllTasks() {
+  const db = await openDB('Gallery', 1, {
+  });
+
+  if (db) {
+    return await db.getAll('Sync')
+  }
+}
+
+async function deleteAllTasks() {
+  const db = await openDB('Gallery', 1, {
+  });
+  if (db) {
+    return await db.clear('Sync')
+  }
+
 }

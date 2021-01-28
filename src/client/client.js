@@ -15,7 +15,6 @@ async function sendFavorite(url, favorite) {
   });
 
   const verb = favorite ? 'POST' : 'DELETE'
-  console.log(verb);
   const obj = {
     url: url,
     subscription: subscription

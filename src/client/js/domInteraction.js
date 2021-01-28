@@ -12,7 +12,6 @@ export function handleFavorite(e) {
   // let buttonFavorite = document.getElementsByClassName("favorite-heart");
   let favorite = (e.target.getAttribute("favorite") == 'true');
   favorite = !favorite
-  console.log(favorite);
   e.target.setAttribute("favorite", favorite.toString());
 }
 

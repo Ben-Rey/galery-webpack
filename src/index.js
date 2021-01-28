@@ -50,7 +50,7 @@ app.post("/subscribe", (req, res) => {
     res.status(201).json("Add image");
 
     // Create payload
-    const payload = JSON.stringify({ title: 'Mes favoris' });
+    const payload = JSON.stringify({ title: 'Mes favoris', favorite : true});
 
     // Pass object into sendNotification
     webpush
@@ -79,7 +79,7 @@ app.delete("/subscribe", (req, res) => {
     res.status(201).json("Image deleted");
 
     // Create payload
-    const payload = JSON.stringify({ title: 'Mes favoris' });
+    const payload = JSON.stringify({ title: 'Mes favoris' , favorite : false});
 
     // Pass object into sendNotification
     webpush

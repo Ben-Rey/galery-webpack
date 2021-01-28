@@ -30,7 +30,6 @@ export async function AddFavorite(picUrl) {
     const tx = db.transaction('Pictures', 'readwrite');
     const store = tx.objectStore('Pictures');
     const value = await store.get(picUrl);
-    console.log(value);
     value.favorite = value.favorite ? false : true
     await store.put(value);
     await tx.done;

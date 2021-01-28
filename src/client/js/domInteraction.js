@@ -1,17 +1,17 @@
-import { addPictureToDb, getAllPictures } from './db'
+import { addPictureToDb, getAllPictures, AddFavorite } from './db'
 import '@fortawesome/fontawesome-free/js/all.js'
 
 let mainContainer = document.getElementById("main-container");
 
 export function handleFavorite(e) {
-  console.log(e.target);
+  AddFavorite(e.target.getAttribute("url"))
   const color = e.target.style.color;
   e.target.style.color = color == 'red' ? 'black' : 'red'; // color is set then clear it, otherwise set to 'red'
 }
 
 
 function addPicturesToDiv(div, picture, favorite) {
-  favorite = false
+  favorite = picture.favorite ? picture.favorite : false
   div.innerHTML += `<div>
                       <div id="favorite-heart" style="color:${favorite ? 'red' : 'black'}" url=${picture.url}>
                         <i class="fas fa-heart"  style="pointer-events: none;" ></i>                    

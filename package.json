@@ -24,9 +24,13 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.2",
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
+    "cors": "^2.8.5",
     "fs": "0.0.1-security",
     "idb": "^6.0.0",
+    "loader": "^2.1.1",
+    "lowdb": "^1.0.0",
     "serviceworker-webpack-plugin": "^1.0.1",
+    "web-push": "^3.4.4",
     "workbox-precaching": "^6.0.2",
     "yarn": "^1.22.10"
   }

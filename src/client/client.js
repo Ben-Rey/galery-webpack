@@ -4,59 +4,28 @@ import { addPictureFromDb, addRandomPicture, handleFavorite } from './js/domInte
 
 const publicKey = "BJUZgBWz1ctYaCXtxs8ks2TgFfR9ehswDHDjS-kIRQ4suyy247IOHJ8skbFZLtZNIreJUevpyvi9p4QYFag-MpU"
 
+const register = await navigator.serviceWorker.register("/sw.js", {
+  scope: "/"
+});
 
-
-async function send(myUrl) {
-  console.log("Registering service worker...");
-
-  const register = await navigator.serviceWorker.register("/sw.js", {
-    scope: "/"
-  });
-
-  console.log("Service Worker Registered...");
-
-  // const register = await navigator.serviceWorker
-  //   .register("/sw.js", { updateViaCache: 'none' })
-  //   .then((reg) => {
-  //     console.log("Votre service worker a été enregistré!");
-  //     reg.addEventListener('updatefound', () => {
-  //       const installing = reg.installing;
-  //       installing.addEventListener('statechange', () => {
-  //         if (installing.state === 'installed') {
-  //           // Afficher un message aux utilisateurs 
-  //           console.log("Votre service worker a été mis à jour! Veuillez rafraichir la page");
-  //         }
-  //       });
-  //     });
-
-  //   })
-  //   .catch((error) => {
-  //     console.error(error);
-  //   });
-
-  console.log("Enregistrement du push");
+async function sendFavorite(url, favorite) {
   const subscription = await register.pushManager.subscribe({
     userVisibleOnly: true,
     applicationServerKey: urlBase64ToUint8Array(publicKey)
   });
-  const url = myUrl
 
+  const verb = favorite ? 'POST' : 'DELETE'
   const obj = {
     url: url,
     subscription: subscription
   } 
-  
-  console.log("Votre push a été enregistré");
-
-  console.log("Envoi de push");
   await fetch("http://localhost:5000/subscribe", {
-    method: "POST",
+    method: verb,
     body: JSON.stringify(obj),
     headers: {
       "content-type": "application/json"
     }
   });
-  console.log("Push envoyé");
 }
 
 function urlBase64ToUint8Array(base64String) {
@@ -106,8 +75,9 @@ buttonInstall.addEventListener("click", (e) => {
 document.addEventListener('click', function (e) {
   if (e.target && e.target.id == 'favorite-heart') {
     e.preventDefault()
+    // console.log(e.target.getAttribute("favorite"));
     if ("serviceWorker" in navigator) {
-      send(e.target.getAttribute("url")).catch(err => console.error(err));
+      sendFavorite(e.target.getAttribute("url"), e.target.getAttribute("favorite")).catch(err => console.error(err));
     } else {
       console.warn("Service workers are not supported.");
     }

@@ -34,11 +34,11 @@ webpush.setVapidDetails(
 );
 
 // Subscribe Route
-app.post("/subscribe", (req, res, next) => {
+app.post("/subscribe", (req, res) => {
     console.log(req.body)
     // Add a post
     db.get('images')
-        .push({ title: req.body.title, url: req.body.url })
+        .push({ url: req.body.url })
         .write()
     // Increment count
     db.update('count', n => n + 1)
@@ -47,7 +47,7 @@ app.post("/subscribe", (req, res, next) => {
     // Get pushSubscription object
     const subscription = req.body.subscription;
     // Send 201 - resource created
-    res.status(201).json("OK");
+    res.status(201).json("Add image");
 
     // Create payload
     const payload = JSON.stringify({ title: 'Mes favoris' });
@@ -58,11 +58,48 @@ app.post("/subscribe", (req, res, next) => {
         .catch(err => console.error(err));
 });
 
-app.get("/favourites", (req, res, next) => {
+// Remove from favourites Route
+app.delete("/subscribe", (req, res) => {
+
+    console.log(db.get('images')
+        .find({ url: req.body.url })
+        .value())
+
+    db.get('images')
+        .remove({ url: req.body.url })
+        .write()
+
+    // Increment count
+    db.update('count', n => n + 1)
+        .write()
+
+    // Get pushSubscription object
+    const subscription = req.body.subscription;
+    // Send 201 - resource created
+    res.status(201).json("Image deleted");
+
+    // Create payload
+    const payload = JSON.stringify({ title: 'Mes favoris' });
+
+    // Pass object into sendNotification
+    webpush
+        .sendNotification(subscription, payload)
+        .catch(err => console.error(err));
+});
+
+app.get("/favourites", (req, res) => {
     let myFavourites = db.get('images').value();
     if (myFavourites) {
         res.status(201).json(myFavourites);
     }
+});
+
+app.delete("/favourites", (req, res) => {
+    db.get('images')
+        .remove()
+        .write()
+
+    res.status(201).json('All favourites deleted');
 });
 
 const port = 5000;

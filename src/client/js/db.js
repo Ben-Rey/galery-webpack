@@ -34,7 +34,7 @@ export async function addPictureToDb(pic) {
 
 export async function AddFavorite(picUrl) {
   if (db) {
-    const tx = db.transaction('Gallery', 'readwrite');
+    const tx = db.transaction('Pictures', 'readwrite');
     const store = tx.objectStore('Pictures');
     const value = await store.get(picUrl);
     value.favorite = value.favorite ? false : true

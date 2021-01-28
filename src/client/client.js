@@ -20,6 +20,10 @@ async function sendFavorite(url, favorite) {
   });
 
   const verb = favorite ? 'POST' : 'DELETE'
+
+  navigator.serviceWorker.ready 
+  .then(reg => reg.sync.register(verb))
+
   const obj = {
     url: url,
     subscription: subscription
@@ -81,10 +85,7 @@ document.addEventListener('click', function (e) {
     e.preventDefault()
     // console.log(e.target.getAttribute("favorite"));
     if ("serviceWorker" in navigator) {
-      if(status = 'granted'){
-        navigator.serviceWorker.ready 
-        .then(reg => reg.sync.register('syncfav'))
-      }
+
       sendFavorite(e.target.getAttribute("url"), !favorite).catch(err => console.error(err));
       
     } else {

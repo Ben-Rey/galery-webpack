@@ -30,7 +30,6 @@ function addPicturesToDiv(div, picture, favorite) {
 }
 
 export function addRandomPicture() {
-  console.log('here');
   if (window.fetch) {
     fetch("https://picsum.photos/1280/720").then(function (response) {
       addPicturesToDiv(mainContainer, response);

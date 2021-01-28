@@ -1,5 +1,6 @@
 import './style.css';
 import './sw'
+import './js/offline'
 import { addPictureFromDb, addRandomPicture, handleFavorite } from './js/domInteraction'
 
 const publicKey = "BJUZgBWz1ctYaCXtxs8ks2TgFfR9ehswDHDjS-kIRQ4suyy247IOHJ8skbFZLtZNIreJUevpyvi9p4QYFag-MpU"
@@ -7,7 +8,6 @@ const publicKey = "BJUZgBWz1ctYaCXtxs8ks2TgFfR9ehswDHDjS-kIRQ4suyy247IOHJ8skbFZL
 let deferredPrompt;
 let buttonAddPicture = document.getElementById("add-picture");
 let buttonInstall = document.getElementById("install-app");
-let offlineDiv = document.getElementById("offline");
 
 const register = await navigator.serviceWorker.register("/sw.js", {
   scope: "/"
@@ -23,7 +23,7 @@ async function sendFavorite(url, favorite) {
   const obj = {
     url: url,
     subscription: subscription
-  } 
+  }
   await fetch("http://localhost:5000/subscribe", {
     method: verb,
     body: JSON.stringify(obj),
@@ -55,15 +55,7 @@ window.addEventListener("beforeinstallprompt", (e) => {
   deferredPrompt = e;
 });
 
-window.addEventListener("online", ()=>{
-  offlineDiv.style.height = '0rem';
-  offlineDiv.innerHTML = ""
-});
-window.addEventListener("offline", ()=>{
-  console.log("offline");
-  offlineDiv.style.height = '2rem';
-  offlineDiv.innerHTML = "You are offline"
-});
+
 
 
 buttonAddPicture.addEventListener("click", addRandomPicture);
